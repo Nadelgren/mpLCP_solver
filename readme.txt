@@ -3,8 +3,7 @@ Complementarity Problem (mpLCP) solver proposed by Nathan Adelgren in the 5th ch
 dissertation titled, "Solution Techniques for Classes of Biobjective and Parametric Programs" 
 (https://tigerprints.clemson.edu/cgi/viewcontent.cgi?article=2755&context=all_dissertations).
 This code was primarily written by Nathan Adelgren in 2016 during work on his PhD at Clemson University.
-Since that time, minor edits have been made based on helpful comments from Pubudu Jayasekara and Margaret 
-Wiecek.
+Since that time, edits have been made based on helpful comments from colleagues.
 
 This implementation was programmed using MATLAB and requires both the symbolic and optimization 
 toolboxes. The program will not function if either of these toolboxes are unavailable. This program
@@ -16,8 +15,8 @@ solves mpLCP, i.e., the following system:
     z >= 0
     
 where x is a k-dimensional vector of parameters which lies in an "attainable" set X, w and z are 
-h-dimensional vectors of decision varaiables, M(x) is an h-by-h matrix of affine functions of x, and q(x)
-is an h-dimensional vector of affine functions of x. Also note that an apostophe has been used above to
+h-dimensional vectors of decision variables, M(x) is an h-by-h matrix of affine functions of x, and q(x)
+is an h-dimensional vector of affine functions of x. Also note that an apostrophe has been used above to
 denote matrix transpose. For background information on mpLCP, please see the above mentioned dissertation 
 and the references therein.
 
@@ -38,7 +37,7 @@ below:
                             (1) row index
                             (2) column index
                             (3) parameter index (0 indicates the constant term)
-                            (4) coeffient
+                            (4) coefficient
                        See below for an example.
     q -- a matrix   -- describes the nonzero contents of q(x) in the same format used above for M.
     A -- a matrix   -- it is assumed in this implementation that the set X can be represented as a system 
