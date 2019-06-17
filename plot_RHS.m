@@ -1,5 +1,5 @@
-function colors = plot_RHS(RHS,c,h,x,colors)
-[X,Y]=meshgrid(0:0.0045:1,0:0.0045:1);
+function colors = plot_RHS(RHS,c,h,x,colors,bounds)
+[X,Y]=meshgrid(bounds(1):(bounds(2)-bounds(1))/225:bounds(2),bounds(3):(bounds(4)-bounds(3))/225:bounds(4));
 z = zeros(size(X));
 ineq = [];
 for i = 1:size(c,2)

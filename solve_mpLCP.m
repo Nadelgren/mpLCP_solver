@@ -17,6 +17,7 @@ svd_nan_inf_flag = 1;
 phase2_failed_iters = [];%[1,4,8,16,19,24];%[1,2,5,10,12,20,24,27,30,34,39];
 use_rand = 0;
 increase_fmincon_time = 1;
+paramBounds = [0;1;0;1];
 
 x = sym('x',[1 k+2]);
 M = sym(zeros(h,h));
@@ -100,6 +101,31 @@ if(exitflag >= 1) feas_pt = [sol,1,0];
 else printf('Feasible starting point not found');
     return
 end
+
+% if k = 2 and plotting is on, find max and min values of parameters in S_theta
+
+if k == 2 && plot_if_k_is_2 == 1
+%x1 lb
+fun = @(x) x(1);
+[~,fval,exitflag] = fmincon(fun,x0,A,b,Aeq,beq,lb(1:k),ub(1:k),nonlcon,options);
+if(exitflag >= 1) paramBounds(1) = fval; end
+
+%x1 ub
+fun = @(x) -x(1);
+[~,fval,exitflag] = fmincon(fun,x0,A,b,Aeq,beq,lb(1:k),ub(1:k),nonlcon,options);
+if(exitflag >= 1) paramBounds(2) = -fval; end
+
+%x2 lb
+fun = @(x) x(2);
+[~,fval,exitflag] = fmincon(fun,x0,A,b,Aeq,beq,lb(1:k),ub(1:k),nonlcon,options);
+if(exitflag >= 1) paramBounds(3) = fval; end
+
+%x2 ub
+fun = @(x) -x(2);
+[~,fval,exitflag] = fmincon(fun,x0,A,b,Aeq,beq,lb(1:k),ub(1:k),nonlcon,options);
+if(exitflag >= 1) paramBounds(4) = -fval; end
+end
+
 
 % Start phase 1
 
@@ -3105,7 +3131,7 @@ colors = [];
 if(k == 2 && plot_if_k_is_2)
     figure;
     hold on;
-    colors = plot_RHS(regions,c,h,x,colors);
+    colors = plot_RHS(regions,c,h,x,colors,paramBounds);
 end
 
 if(print_stuff)
@@ -3687,7 +3713,7 @@ while(size(basis_stack,1) > 0 &&  phase2_iter < phase2_max_iter && etime(clock,t
                                  %disp(sprintf('Plotting RHS, Line %d',MFileLineNr()));
     %                              feas_pt
     %                              temp_RHS
-                                 colors = plot_RHS(temp_RHS,c,h,x,colors);
+                                 colors = plot_RHS(temp_RHS,c,h,x,colors,paramBounds);
                                end
                              elseif(exitflag == -2)
                                  feas_pts = [feas_pts;x0];
@@ -3847,7 +3873,7 @@ while(size(basis_stack,1) > 0 &&  phase2_iter < phase2_max_iter && etime(clock,t
                                                  if(k == 2 && plot_if_k_is_2)
                                                  %disp(sprintf('Plotting RHS, Line %d',MFileLineNr()));
     %                                              temp_RHS
-                                                    colors = plot_RHS(temp_RHS,c,h,x,colors);
+                                                    colors = plot_RHS(temp_RHS,c,h,x,colors,paramBounds);
                                                  end
                                              elseif(exitflag == -2)
                                                  feas_pts = [feas_pts;x0];
@@ -4002,7 +4028,7 @@ while(size(basis_stack,1) > 0 &&  phase2_iter < phase2_max_iter && etime(clock,t
                                                  if(k == 2 && plot_if_k_is_2)
                                                  %disp(sprintf('Plotting RHS, Line %d',MFileLineNr()));
     %                                              temp_RHS
-                                                    colors = plot_RHS(temp_RHS,c,h,x,colors);
+                                                    colors = plot_RHS(temp_RHS,c,h,x,colors,paramBounds);
                                                  end
                                              elseif(exitflag == -2)
                                                  feas_pts = [feas_pts;x0];
@@ -4151,7 +4177,7 @@ while(size(basis_stack,1) > 0 &&  phase2_iter < phase2_max_iter && etime(clock,t
 		                         if(k == 2 && plot_if_k_is_2)
                                    %disp(sprintf('Plotting RHS, Line %d',MFileLineNr()));
     %                                temp_RHS
-                                     colors = plot_RHS(temp_RHS,c,h,x,colors);
+                                     colors = plot_RHS(temp_RHS,c,h,x,colors,paramBounds);
                                    end
 		                     elseif(exitflag == -2)
 		                         feas_pts = [feas_pts;x0];
@@ -4309,7 +4335,7 @@ while(size(basis_stack,1) > 0 &&  phase2_iter < phase2_max_iter && etime(clock,t
 		                                         if(k == 2 && plot_if_k_is_2)
                                                  %disp(sprintf('Plotting RHS, Line %d',MFileLineNr()));
 %                                                  temp_RHS
-                                                    colors = plot_RHS(temp_RHS,c,h,x,colors);
+                                                    colors = plot_RHS(temp_RHS,c,h,x,colors,paramBounds);
                                                  end
 		                                     elseif(exitflag == -2)
 		                                         feas_pts = [feas_pts;x0];
@@ -4462,7 +4488,7 @@ while(size(basis_stack,1) > 0 &&  phase2_iter < phase2_max_iter && etime(clock,t
 		                                         if(k == 2 && plot_if_k_is_2)
                                                  %disp(sprintf('Plotting RHS, Line %d',MFileLineNr()));
 %                                                  temp_RHS
-                                                    colors = plot_RHS(temp_RHS,c,h,x,colors);
+                                                    colors = plot_RHS(temp_RHS,c,h,x,colors,paramBounds);
                                                  end
 		                                     elseif(exitflag == -2)
 		                                         feas_pts = [feas_pts;x0];
@@ -4655,7 +4681,7 @@ while(size(basis_stack,1) > 0 &&  phase2_iter < phase2_max_iter && etime(clock,t
                                  if(k == 2 && plot_if_k_is_2)
                                    %disp(sprintf('Plotting RHS, Line %d',MFileLineNr()));
         %                            temp_RHS
-                                     colors = plot_RHS(temp_RHS,c,h,x,colors);
+                                     colors = plot_RHS(temp_RHS,c,h,x,colors,paramBounds);
                                  end
                              elseif(exitflag == -2)
                                  feas_pts = [feas_pts;x0];
@@ -4801,7 +4827,7 @@ while(size(basis_stack,1) > 0 &&  phase2_iter < phase2_max_iter && etime(clock,t
                                                  if(k == 2 && plot_if_k_is_2)
                                                  %disp(sprintf('Plotting RHS, Line %d',MFileLineNr()));
     %                                              temp_RHS
-                                                    colors = plot_RHS(temp_RHS,c,h,x,colors);
+                                                    colors = plot_RHS(temp_RHS,c,h,x,colors,paramBounds);
                                                  end
                                              elseif(exitflag == -2)
                                                  feas_pts = [feas_pts;x0];
@@ -4946,7 +4972,7 @@ while(size(basis_stack,1) > 0 &&  phase2_iter < phase2_max_iter && etime(clock,t
                                                  if(k == 2 && plot_if_k_is_2)
                                                  %disp(sprintf('Plotting RHS, Line %d',MFileLineNr()));
     %                                              temp_RHS
-                                                    colors = plot_RHS(temp_RHS,c,h,x,colors);
+                                                    colors = plot_RHS(temp_RHS,c,h,x,colors,paramBounds);
                                                  end
                                              elseif(exitflag == -2)
                                                  feas_pts = [feas_pts;x0];
@@ -5071,7 +5097,7 @@ while(size(basis_stack,1) > 0 &&  phase2_iter < phase2_max_iter && etime(clock,t
                                  if(k == 2 && plot_if_k_is_2)
                                    %disp(sprintf('Plotting RHS, Line %d',MFileLineNr()));
         %                            temp_RHS
-                                     colors = plot_RHS(temp_RHS,c,h,x,colors);
+                                     colors = plot_RHS(temp_RHS,c,h,x,colors,paramBounds);
                                    end
                              elseif(exitflag == -2)
                                  feas_pts = [feas_pts;x0];
@@ -5217,7 +5243,7 @@ while(size(basis_stack,1) > 0 &&  phase2_iter < phase2_max_iter && etime(clock,t
                                                  if(k == 2 && plot_if_k_is_2)
                                                  %disp(sprintf('Plotting RHS, Line %d',MFileLineNr()));
     %                                              temp_RHS
-                                                    colors = plot_RHS(temp_RHS,c,h,x,colors);
+                                                    colors = plot_RHS(temp_RHS,c,h,x,colors,paramBounds);
                                                  end
                                              elseif(exitflag == -2)
                                                  feas_pts = [feas_pts;x0];
@@ -5362,7 +5388,7 @@ while(size(basis_stack,1) > 0 &&  phase2_iter < phase2_max_iter && etime(clock,t
                                                  if(k == 2 && plot_if_k_is_2)
                                                  %disp(sprintf('Plotting RHS, Line %d',MFileLineNr()));
     %                                              temp_RHS
-                                                    colors = plot_RHS(temp_RHS,c,h,x,colors);
+                                                    colors = plot_RHS(temp_RHS,c,h,x,colors,paramBounds);
                                                  end
                                              elseif(exitflag == -2)
                                                  feas_pts = [feas_pts;x0];
