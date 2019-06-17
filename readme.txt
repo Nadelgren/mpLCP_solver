@@ -105,8 +105,7 @@ for each invariancy region (for the definition of an invariancy region, see the 
 dissertation). Note that the invariancy region itself is given by the semi-algebraic set resulting from 
 setting each given function greater than or equal to zero.
 
-In the case in which k=2, the provided code also generates a plot of the set of invariancy regions on the 
-region 0 <= x1 <= 1, 0 <= x2 <= 1. (This range can be modified in the file "plot_RHS.m", if desired.) 
+In the case in which k=2, the provided code also generates a plot of the set of invariancy regions. 
 An additional file titled "colors_used.txt" is also produced whenever this plot is generated. This file 
 contains the randomly generated RGB color vectors associated with each invariancy region in the plot.
 
