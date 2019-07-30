@@ -1,4 +1,4 @@
-function regions = solve_mpLCP_new2(h,k,M_data,q_data,S_theta,S_theta_RHS)
+function regions = solve_mpLCP(h,k,M_data,q_data,S_theta,S_theta_RHS)
 
 warning('off','MATLAB:rankDeficientMatrix');
 
